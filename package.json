@@ -1,0 +1,55 @@
+{
+  "name": "sri-check",
+  "version": "1.0.0",
+  "description": "GitHub Action to validate Subresource Integrity (SRI) attributes in HTML files",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build src/index.ts -o dist --license licenses.txt",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cobacoch/script-integrity-checker-dev.git"
+  },
+  "keywords": [
+    "github-action",
+    "security",
+    "sri",
+    "subresource-integrity",
+    "html",
+    "integrity"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cobacoch/script-integrity-checker-dev/issues"
+  },
+  "homepage": "https://github.com/cobacoch/script-integrity-checker-dev#readme",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/minimatch": "^5.1.2",
+    "@types/node": "^22.19.2",
+    "@vercel/ncc": "^0.38.4",
+    "eslint": "^9.39.1",
+    "prettier": "^3.7.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.49.0",
+    "vitest": "^4.0.15"
+  },
+  "dependencies": {
+    "@actions/core": "^2.0.1",
+    "@actions/github": "^6.0.1",
+    "cheerio": "^1.1.2",
+    "minimatch": "^10.1.1"
+  }
+}

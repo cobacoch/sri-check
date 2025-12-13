@@ -1,0 +1,55 @@
+name: 'SRI Check'
+description: 'Validate Subresource Integrity (SRI) attributes in HTML files within Pull Request changes'
+author: 'SRI Check Contributors'
+
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  github-token:
+    description: 'GitHub token for API access'
+    required: false
+    default: '${{ github.token }}'
+  file-patterns:
+    description: 'Glob patterns for files to check (comma-separated)'
+    required: false
+    default: '**/*.html,**/*.htm,**/*.php'
+  exclude-patterns:
+    description: 'Glob patterns for files to exclude (comma-separated)'
+    required: false
+    default: ''
+  fail-mode:
+    description: 'Action behavior when issues are found: "fail" or "warn"'
+    required: false
+    default: 'fail'
+  verify-hashes:
+    description: 'Fetch external resources and verify integrity hashes'
+    required: false
+    default: 'false'
+  check-crossorigin:
+    description: 'Check for crossorigin attribute on tags with integrity'
+    required: false
+    default: 'false'
+  fetch-timeout:
+    description: 'Timeout for fetching external resources (milliseconds)'
+    required: false
+    default: '10000'
+  output-format:
+    description: 'Output format: "text" or "json"'
+    required: false
+    default: 'text'
+
+outputs:
+  total-issues:
+    description: 'Total number of issues found'
+  error-count:
+    description: 'Number of errors found'
+  warning-count:
+    description: 'Number of warnings found'
+  files-checked:
+    description: 'Number of files checked'
+
+runs:
+  using: 'node24'
+  main: 'dist/index.js'
