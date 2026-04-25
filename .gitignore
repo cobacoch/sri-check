@@ -30,6 +30,6 @@ npm-debug.log*
 *.tsbuildinfo
 
 # Build artifacts (only the bundled entry point and licenses are published)
-dist/*
+dist/**
 !dist/index.js
 !dist/licenses.txt

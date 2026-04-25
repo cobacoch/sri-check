@@ -12,8 +12,6 @@
     "lint:fix": "biome lint src --write",
     "format": "biome format src --write",
     "format:check": "biome format src",
-    "check": "biome check src",
-    "check:fix": "biome check src --write",
     "typecheck": "tsc --noEmit"
   },
   "repository": {
