@@ -8,16 +8,16 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { loadConfig } from './config-loader.js';
-import { getPullRequestFiles, filterFilesByPattern, getFileContents } from './file-detector.js';
+import { filterFilesByPattern, getFileContents, getPullRequestFiles } from './file-detector.js';
+import { verifyResourcesHashes } from './hash-verifier.js';
 import { parseHtml } from './html-parser.js';
 import { validateResources } from './integrity-validator.js';
-import { verifyResourcesHashes } from './hash-verifier.js';
 import {
   createReport,
-  outputTextReport,
-  outputJsonReport,
-  outputAllAnnotations,
   type FileResult,
+  outputAllAnnotations,
+  outputJsonReport,
+  outputTextReport,
 } from './reporter.js';
 
 async function run(): Promise<void> {
@@ -88,11 +88,11 @@ async function run(): Promise<void> {
 
     if (hasErrors && config.failMode === 'fail') {
       core.setFailed(
-        `Found ${report.summary.errorCount} errors and ${report.summary.hashVerificationsFailed} hash verification failures`
+        `Found ${report.summary.errorCount} errors and ${report.summary.hashVerificationsFailed} hash verification failures`,
       );
     } else if (report.summary.totalIssues > 0 || report.summary.hashVerificationsFailed > 0) {
       core.warning(
-        `Found ${report.summary.totalIssues} issues and ${report.summary.hashVerificationsFailed} hash verification failures`
+        `Found ${report.summary.totalIssues} issues and ${report.summary.hashVerificationsFailed} hash verification failures`,
       );
     } else {
       core.info('All integrity checks passed!');

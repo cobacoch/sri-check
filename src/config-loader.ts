@@ -29,7 +29,7 @@ function parseBoolean(value: string): boolean {
 
 function parseNumber(value: string, defaultValue: number): number {
   const parsed = parseInt(value, 10);
-  return isNaN(parsed) ? defaultValue : parsed;
+  return Number.isNaN(parsed) ? defaultValue : parsed;
 }
 
 function parseFailMode(value: string): 'fail' | 'warn' {

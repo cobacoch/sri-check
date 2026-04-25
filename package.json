@@ -8,10 +8,12 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint src --ext .ts",
-    "lint:fix": "eslint src --ext .ts --fix",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "format:check": "prettier --check \"src/**/*.ts\"",
+    "lint": "biome lint src",
+    "lint:fix": "biome lint src --write",
+    "format": "biome format src --write",
+    "format:check": "biome format src",
+    "check": "biome check src",
+    "check:fix": "biome check src --write",
     "typecheck": "tsc --noEmit"
   },
   "repository": {
@@ -36,14 +38,11 @@
     "node": ">=22.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
+    "@biomejs/biome": "2.4.13",
     "@types/minimatch": "^5.1.2",
     "@types/node": "^22.19.2",
     "@vercel/ncc": "^0.38.4",
-    "eslint": "^9.39.1",
-    "prettier": "^3.7.4",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.49.0",
     "vitest": "^4.0.15"
   },
   "dependencies": {

@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
-import type { ValidationIssue } from './integrity-validator.js';
 import type { HashVerificationResult } from './hash-verifier.js';
+import type { ValidationIssue } from './integrity-validator.js';
 
 export interface FileResult {
   filename: string;
@@ -76,15 +76,13 @@ export function outputTextReport(report: Report): void {
 
     for (const issue of file.issues) {
       const prefix = issue.severity === 'error' ? '❌' : '⚠️';
-      core.info(
-        `  ${prefix} Line ${issue.resource.line}: ${issue.message}`
-      );
+      core.info(`  ${prefix} Line ${issue.resource.line}: ${issue.message}`);
     }
 
     for (const result of file.hashResults) {
       if (!result.verified) {
         core.info(
-          `  ❌ Line ${result.resource.line}: Hash verification failed for ${result.resource.src}: ${result.error}`
+          `  ❌ Line ${result.resource.line}: Hash verification failed for ${result.resource.src}: ${result.error}`,
         );
       }
     }
@@ -126,7 +124,7 @@ export function outputJsonReport(report: Report): void {
       summary: report.summary,
     },
     null,
-    2
+    2,
   );
 
   core.info(jsonOutput);

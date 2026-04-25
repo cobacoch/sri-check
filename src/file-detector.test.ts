@@ -1,13 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import * as github from '@actions/github';
-import * as core from '@actions/core';
 import * as fs from 'node:fs/promises';
+import * as core from '@actions/core';
+import * as github from '@actions/github';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  getPullRequestFiles,
   filterFilesByPattern,
   getFileContents,
+  getPullRequestFiles,
   type PullRequestFile,
-  type FileWithContent,
 } from './file-detector.js';
 
 vi.mock('@actions/github');
@@ -34,7 +33,9 @@ describe('FileDetector', () => {
         },
       };
 
-      vi.mocked(github.getOctokit).mockReturnValue(mockOctokit as ReturnType<typeof github.getOctokit>);
+      vi.mocked(github.getOctokit).mockReturnValue(
+        mockOctokit as ReturnType<typeof github.getOctokit>,
+      );
 
       const context = {
         repo: { owner: 'test-owner', repo: 'test-repo' },
@@ -63,7 +64,9 @@ describe('FileDetector', () => {
         },
       };
 
-      vi.mocked(github.getOctokit).mockReturnValue(mockOctokit as ReturnType<typeof github.getOctokit>);
+      vi.mocked(github.getOctokit).mockReturnValue(
+        mockOctokit as ReturnType<typeof github.getOctokit>,
+      );
 
       const context = {
         repo: { owner: 'test-owner', repo: 'test-repo' },
@@ -89,7 +92,9 @@ describe('FileDetector', () => {
         },
       };
 
-      vi.mocked(github.getOctokit).mockReturnValue(mockOctokit as ReturnType<typeof github.getOctokit>);
+      vi.mocked(github.getOctokit).mockReturnValue(
+        mockOctokit as ReturnType<typeof github.getOctokit>,
+      );
 
       const context = {
         repo: { owner: 'test-owner', repo: 'test-repo' },
@@ -109,7 +114,7 @@ describe('FileDetector', () => {
       };
 
       await expect(
-        getPullRequestFiles('fake-token', context as typeof github.context)
+        getPullRequestFiles('fake-token', context as typeof github.context),
       ).rejects.toThrow('This action must be run in a pull_request context');
     });
 
@@ -123,7 +128,9 @@ describe('FileDetector', () => {
         },
       };
 
-      vi.mocked(github.getOctokit).mockReturnValue(mockOctokit as ReturnType<typeof github.getOctokit>);
+      vi.mocked(github.getOctokit).mockReturnValue(
+        mockOctokit as ReturnType<typeof github.getOctokit>,
+      );
 
       const context = {
         repo: { owner: 'test-owner', repo: 'test-repo' },
@@ -172,7 +179,11 @@ describe('FileDetector', () => {
     });
 
     it('should exclude files matching exclude patterns', () => {
-      const result = filterFilesByPattern(testFiles, ['**/*.html'], ['vendor/**', 'node_modules/**']);
+      const result = filterFilesByPattern(
+        testFiles,
+        ['**/*.html'],
+        ['vendor/**', 'node_modules/**'],
+      );
 
       expect(result).toHaveLength(2);
       expect(result.map((f) => f.filename)).toEqual(['index.html', 'src/page.html']);
@@ -201,11 +212,7 @@ describe('FileDetector', () => {
     });
 
     it('should apply exclude patterns after include patterns', () => {
-      const result = filterFilesByPattern(
-        testFiles,
-        ['**/*.html', '**/*.css'],
-        ['**/*.css']
-      );
+      const result = filterFilesByPattern(testFiles, ['**/*.html', '**/*.css'], ['**/*.css']);
 
       expect(result).toHaveLength(4);
       expect(result.every((f) => !f.filename.endsWith('.css'))).toBe(true);
@@ -257,9 +264,7 @@ describe('FileDetector', () => {
 
       expect(result).toHaveLength(1);
       expect(result[0]?.filename).toBe('exists.html');
-      expect(core.warning).toHaveBeenCalledWith(
-        expect.stringContaining('missing.html')
-      );
+      expect(core.warning).toHaveBeenCalledWith(expect.stringContaining('missing.html'));
     });
 
     it('should handle empty file list', async () => {
@@ -276,9 +281,7 @@ describe('FileDetector', () => {
       const result = await getFileContents(files);
 
       expect(result).toHaveLength(0);
-      expect(core.warning).toHaveBeenCalledWith(
-        expect.stringContaining('error.html')
-      );
+      expect(core.warning).toHaveBeenCalledWith(expect.stringContaining('error.html'));
     });
 
     it('should read files with correct encoding', async () => {

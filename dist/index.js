@@ -74012,7 +74012,7 @@ function parseBoolean(value) {
 }
 function parseNumber(value, defaultValue) {
     const parsed = parseInt(value, 10);
-    return isNaN(parsed) ? defaultValue : parsed;
+    return Number.isNaN(parsed) ? defaultValue : parsed;
 }
 function parseFailMode(value) {
     if (value === 'warn') {
@@ -74091,9 +74091,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getPullRequestFiles = getPullRequestFiles;
 exports.filterFilesByPattern = filterFilesByPattern;
 exports.getFileContents = getFileContents;
-const github = __importStar(__nccwpck_require__(3228));
-const core = __importStar(__nccwpck_require__(7484));
 const fs = __importStar(__nccwpck_require__(1455));
+const core = __importStar(__nccwpck_require__(7484));
+const github = __importStar(__nccwpck_require__(3228));
 const minimatch_1 = __nccwpck_require__(6507);
 async function getPullRequestFiles(token, context) {
     const pullRequest = context.payload.pull_request;
@@ -74198,7 +74198,7 @@ function parseIntegrityHash(integrity) {
     const parts = integrity.split(/\s+/);
     for (const part of parts) {
         const match = part.match(/^(sha256|sha384|sha512)-(.+)$/);
-        if (match && match[1] && match[2]) {
+        if (match?.[1] && match[2]) {
             return {
                 algorithm: match[1],
                 hash: match[2],
@@ -74236,9 +74236,7 @@ async function verifyResourceHash(resource, options) {
             error: 'Only HTTPS URLs are supported for hash verification',
         };
     }
-    const url = resource.src.startsWith('//')
-        ? `https:${resource.src}`
-        : resource.src;
+    const url = resource.src.startsWith('//') ? `https:${resource.src}` : resource.src;
     try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), options.timeout);
@@ -74464,9 +74462,9 @@ const core = __importStar(__nccwpck_require__(7484));
 const github = __importStar(__nccwpck_require__(3228));
 const config_loader_js_1 = __nccwpck_require__(4017);
 const file_detector_js_1 = __nccwpck_require__(5928);
+const hash_verifier_js_1 = __nccwpck_require__(326);
 const html_parser_js_1 = __nccwpck_require__(4568);
 const integrity_validator_js_1 = __nccwpck_require__(5323);
-const hash_verifier_js_1 = __nccwpck_require__(326);
 const reporter_js_1 = __nccwpck_require__(5622);
 async function run() {
     try {

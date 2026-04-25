@@ -19,7 +19,7 @@ export interface ParseResult {
 
 function calculateLineAndColumn(
   content: string,
-  startIndex: number
+  startIndex: number,
 ): { line: number; column: number } {
   const beforeElement = content.substring(0, startIndex);
   const lines = beforeElement.split('\n');

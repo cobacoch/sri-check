@@ -1,15 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as core from '@actions/core';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { ExternalResource } from './html-parser.js';
 import {
   createReport,
-  outputTextReport,
-  outputJsonReport,
-  outputAllAnnotations,
   type FileResult,
+  outputAllAnnotations,
+  outputJsonReport,
+  outputTextReport,
 } from './reporter.js';
-import type { ValidationIssue } from './integrity-validator.js';
-import type { HashVerificationResult } from './hash-verifier.js';
-import type { ExternalResource } from './html-parser.js';
 
 vi.mock('@actions/core');
 
@@ -167,9 +165,7 @@ describe('Reporter', () => {
         {
           filename: 'test.html',
           issues: [],
-          hashResults: [
-            { resource, verified: false, error: 'Hash mismatch' },
-          ],
+          hashResults: [{ resource, verified: false, error: 'Hash mismatch' }],
         },
       ];
 
@@ -220,9 +216,9 @@ describe('Reporter', () => {
 
       const calls = vi.mocked(core.info).mock.calls;
       const jsonCall = calls.find((c) => c[0].includes('"files"'));
-      expect(jsonCall).toBeDefined();
+      if (!jsonCall) throw new Error('jsonCall not found');
 
-      const parsed = JSON.parse(jsonCall![0]);
+      const parsed = JSON.parse(jsonCall[0]);
       expect(parsed.files).toHaveLength(1);
       expect(parsed.summary.errorCount).toBe(1);
     });
@@ -249,7 +245,8 @@ describe('Reporter', () => {
 
       const calls = vi.mocked(core.info).mock.calls;
       const jsonCall = calls.find((c) => c[0].includes('"files"'));
-      const parsed = JSON.parse(jsonCall![0]);
+      if (!jsonCall) throw new Error('jsonCall not found');
+      const parsed = JSON.parse(jsonCall[0]);
 
       expect(parsed.files[0].issues[0]).toMatchObject({
         type: 'missing-integrity',
@@ -321,9 +318,7 @@ describe('Reporter', () => {
         {
           filename: 'test.html',
           issues: [],
-          hashResults: [
-            { resource, verified: false, error: 'Hash mismatch' },
-          ],
+          hashResults: [{ resource, verified: false, error: 'Hash mismatch' }],
         },
       ];
 
@@ -335,7 +330,7 @@ describe('Reporter', () => {
         expect.objectContaining({
           file: 'test.html',
           startLine: 20,
-        })
+        }),
       );
     });
 
@@ -390,8 +385,14 @@ describe('Reporter', () => {
       outputAllAnnotations(report);
 
       expect(core.error).toHaveBeenCalledTimes(2);
-      expect(core.error).toHaveBeenCalledWith('Error 1', expect.objectContaining({ file: 'file1.html' }));
-      expect(core.error).toHaveBeenCalledWith('Error 2', expect.objectContaining({ file: 'file2.html' }));
+      expect(core.error).toHaveBeenCalledWith(
+        'Error 1',
+        expect.objectContaining({ file: 'file1.html' }),
+      );
+      expect(core.error).toHaveBeenCalledWith(
+        'Error 2',
+        expect.objectContaining({ file: 'file2.html' }),
+      );
     });
   });
 });

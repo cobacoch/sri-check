@@ -1,10 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import type { ExternalResource } from './html-parser.js';
 import {
+  type ValidationOptions,
   validateResource,
   validateResources,
-  type ValidationOptions,
 } from './integrity-validator.js';
-import type { ExternalResource } from './html-parser.js';
 
 describe('IntegrityValidator', () => {
   const defaultOptions: ValidationOptions = {
