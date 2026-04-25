@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { verifyResourceHash, verifyResourcesHashes } from './hash-verifier.js';
 import type { ExternalResource } from './html-parser.js';
 
@@ -36,18 +36,18 @@ describe('HashVerifier', () => {
 
       it('should accept protocol-relative URLs', async () => {
         vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-          new Response('test content', { status: 200 })
+          new Response('test content', { status: 200 }),
         );
 
         const resource = createResource({
           src: '//example.com/app.js',
           integrity: 'sha256-7iDP7V0PVOAZQXisIRzPT5Fg3uo5oW0vjiE8+CF8qvE=',
         });
-        const result = await verifyResourceHash(resource, defaultOptions);
+        await verifyResourceHash(resource, defaultOptions);
 
         expect(globalThis.fetch).toHaveBeenCalledWith(
           'https://example.com/app.js',
-          expect.any(Object)
+          expect.any(Object),
         );
       });
     });
@@ -73,9 +73,7 @@ describe('HashVerifier', () => {
     describe('hash verification', () => {
       it('should verify matching hash', async () => {
         const content = 'test content';
-        vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-          new Response(content, { status: 200 })
-        );
+        vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(content, { status: 200 }));
 
         const resource = createResource({
           integrity: 'sha256-auinVVUgn9bEQVfArtgBbnY/9DWhnPGG92hjFAFD/3I=',
@@ -88,7 +86,7 @@ describe('HashVerifier', () => {
 
       it('should detect hash mismatch', async () => {
         vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-          new Response('different content', { status: 200 })
+          new Response('different content', { status: 200 }),
         );
 
         const resource = createResource({
@@ -104,9 +102,7 @@ describe('HashVerifier', () => {
 
       it('should support sha384 algorithm', async () => {
         const content = 'test content';
-        vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-          new Response(content, { status: 200 })
-        );
+        vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(content, { status: 200 }));
 
         const resource = createResource({
           integrity: 'sha384-8cFK5mW+eeVbAO7clwcEVX1yowIas7iMz9wbg9HWbEeQkeI8+2Ah9Dt6EnOm9KMY',
@@ -118,9 +114,7 @@ describe('HashVerifier', () => {
 
       it('should support sha512 algorithm', async () => {
         const content = 'test content';
-        vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-          new Response(content, { status: 200 })
-        );
+        vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(content, { status: 200 }));
 
         const resource = createResource({
           integrity:
@@ -133,9 +127,7 @@ describe('HashVerifier', () => {
 
       it('should use first valid hash from multiple hashes', async () => {
         const content = 'test content';
-        vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-          new Response(content, { status: 200 })
-        );
+        vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(content, { status: 200 }));
 
         const resource = createResource({
           integrity:
@@ -150,7 +142,7 @@ describe('HashVerifier', () => {
     describe('error handling', () => {
       it('should handle HTTP error responses', async () => {
         vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-          new Response('Not Found', { status: 404, statusText: 'Not Found' })
+          new Response('Not Found', { status: 404, statusText: 'Not Found' }),
         );
 
         const resource = createResource();
@@ -177,7 +169,7 @@ describe('HashVerifier', () => {
               const error = new Error('Aborted');
               error.name = 'AbortError';
               setTimeout(() => reject(error), 100);
-            })
+            }),
         );
 
         const resource = createResource();
@@ -193,7 +185,7 @@ describe('HashVerifier', () => {
     it('should verify multiple resources', async () => {
       const content = 'test content';
       vi.spyOn(globalThis, 'fetch').mockImplementation(() =>
-        Promise.resolve(new Response(content, { status: 200 }))
+        Promise.resolve(new Response(content, { status: 200 })),
       );
 
       const resources: ExternalResource[] = [
@@ -222,7 +214,7 @@ describe('HashVerifier', () => {
       ];
 
       vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-        new Response('test content', { status: 200 })
+        new Response('test content', { status: 200 }),
       );
 
       const results = await verifyResourcesHashes(resources, defaultOptions);
@@ -239,7 +231,7 @@ describe('HashVerifier', () => {
       ];
 
       vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-        new Response('test content', { status: 200 })
+        new Response('test content', { status: 200 }),
       );
 
       const results = await verifyResourcesHashes(resources, defaultOptions);

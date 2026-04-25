@@ -4,7 +4,11 @@ export type IssueSeverity = 'error' | 'warning';
 
 export interface ValidationIssue {
   resource: ExternalResource;
-  type: 'missing-integrity' | 'invalid-integrity-format' | 'missing-crossorigin' | 'invalid-crossorigin';
+  type:
+    | 'missing-integrity'
+    | 'invalid-integrity-format'
+    | 'missing-crossorigin'
+    | 'invalid-crossorigin';
   severity: IssueSeverity;
   message: string;
 }
@@ -43,7 +47,7 @@ function isValidCrossoriginValue(crossorigin: string): boolean {
 
 export function validateResource(
   resource: ExternalResource,
-  options: ValidationOptions
+  options: ValidationOptions,
 ): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   const severity: IssueSeverity = options.failMode === 'fail' ? 'error' : 'warning';
@@ -94,7 +98,7 @@ export function validateResource(
 
 export function validateResources(
   resources: ExternalResource[],
-  options: ValidationOptions
+  options: ValidationOptions,
 ): ValidationIssue[] {
   return resources.flatMap((resource) => validateResource(resource, options));
 }

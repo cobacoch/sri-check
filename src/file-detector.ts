@@ -1,6 +1,6 @@
-import * as github from '@actions/github';
-import * as core from '@actions/core';
 import * as fs from 'node:fs/promises';
+import * as core from '@actions/core';
+import * as github from '@actions/github';
 import { minimatch } from 'minimatch';
 
 export interface PullRequestFile {
@@ -16,7 +16,7 @@ type GitHubContext = typeof github.context;
 
 export async function getPullRequestFiles(
   token: string,
-  context: GitHubContext
+  context: GitHubContext,
 ): Promise<PullRequestFile[]> {
   const pullRequest = context.payload.pull_request;
 
@@ -48,7 +48,7 @@ function matchesAnyPattern(filename: string, patterns: string[]): boolean {
 export function filterFilesByPattern(
   files: PullRequestFile[],
   includePatterns: string[],
-  excludePatterns: string[]
+  excludePatterns: string[],
 ): PullRequestFile[] {
   return files.filter((file) => {
     const included = matchesAnyPattern(file.filename, includePatterns);

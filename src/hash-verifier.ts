@@ -15,13 +15,11 @@ export interface HashVerifierOptions {
   timeout: number;
 }
 
-function parseIntegrityHash(
-  integrity: string
-): { algorithm: HashAlgorithm; hash: string } | null {
+function parseIntegrityHash(integrity: string): { algorithm: HashAlgorithm; hash: string } | null {
   const parts = integrity.split(/\s+/);
   for (const part of parts) {
     const match = part.match(/^(sha256|sha384|sha512)-(.+)$/);
-    if (match && match[1] && match[2]) {
+    if (match?.[1] && match[2]) {
       return {
         algorithm: match[1] as HashAlgorithm,
         hash: match[2],
@@ -41,7 +39,7 @@ function isHttpsUrl(url: string): boolean {
 
 export async function verifyResourceHash(
   resource: ExternalResource,
-  options: HashVerifierOptions
+  options: HashVerifierOptions,
 ): Promise<HashVerificationResult> {
   if (!resource.integrity) {
     return {
@@ -68,9 +66,7 @@ export async function verifyResourceHash(
     };
   }
 
-  const url = resource.src.startsWith('//')
-    ? `https:${resource.src}`
-    : resource.src;
+  const url = resource.src.startsWith('//') ? `https:${resource.src}` : resource.src;
 
   try {
     const controller = new AbortController();
@@ -122,7 +118,7 @@ export async function verifyResourceHash(
 
 export async function verifyResourcesHashes(
   resources: ExternalResource[],
-  options: HashVerifierOptions
+  options: HashVerifierOptions,
 ): Promise<HashVerificationResult[]> {
   const results: HashVerificationResult[] = [];
 

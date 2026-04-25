@@ -1,6 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import * as core from '@actions/core';
-import { parseHtml, type ExternalResource } from './html-parser.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { parseHtml } from './html-parser.js';
 
 vi.mock('@actions/core');
 
@@ -30,8 +29,7 @@ describe('HtmlParser', () => {
       });
 
       it('should extract integrity attribute', () => {
-        const html =
-          '<script src="app.js" integrity="sha384-abc123"></script>';
+        const html = '<script src="app.js" integrity="sha384-abc123"></script>';
         const result = parseHtml(html, 'test.html');
 
         expect(result.resources[0]?.integrity).toBe('sha384-abc123');
@@ -86,16 +84,14 @@ describe('HtmlParser', () => {
       });
 
       it('should extract integrity from link tags', () => {
-        const html =
-          '<link rel="stylesheet" href="styles.css" integrity="sha256-xyz789">';
+        const html = '<link rel="stylesheet" href="styles.css" integrity="sha256-xyz789">';
         const result = parseHtml(html, 'test.html');
 
         expect(result.resources[0]?.integrity).toBe('sha256-xyz789');
       });
 
       it('should extract crossorigin from link tags', () => {
-        const html =
-          '<link rel="stylesheet" href="styles.css" crossorigin="use-credentials">';
+        const html = '<link rel="stylesheet" href="styles.css" crossorigin="use-credentials">';
         const result = parseHtml(html, 'test.html');
 
         expect(result.resources[0]?.crossorigin).toBe('use-credentials');
@@ -118,7 +114,8 @@ describe('HtmlParser', () => {
       });
 
       it('should calculate correct line for link', () => {
-        const html = '<html>\n<head>\n\n<link rel="stylesheet" href="styles.css">\n</head>\n</html>';
+        const html =
+          '<html>\n<head>\n\n<link rel="stylesheet" href="styles.css">\n</head>\n</html>';
         const result = parseHtml(html, 'test.html');
 
         expect(result.resources[0]?.line).toBe(4);
